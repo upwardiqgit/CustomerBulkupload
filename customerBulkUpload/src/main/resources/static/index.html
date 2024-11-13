@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home Page</title>
+    <style>
+        /* Basic Reset */
+        body, h1, h2, p, a {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        /* Overall body styles */
+        body {
+            margin: 0;
+            background-color: #f4f4f4;
+        }
+
+        /* Full-width image at the top */
+        .header {
+            width: 100%;
+            height: 300px; /* Adjust height of the image */
+            background-image: url(./logo\ _1.jpg); /* Replace with your image URL */
+            background-size: cover;
+            background-position: center;
+        }
+
+        /* Left Sidebar (25% width) */
+        .sidebar {
+            width: 25%;
+            background-color: #333;
+            color: white;
+            padding: 20px;
+            box-sizing: border-box;
+            float: left;
+        }
+
+        /* Sidebar links style */
+        .sidebar a {
+            display: block;
+            color: white;
+            text-decoration: none;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #444;
+            transition: background-color 0.3s;
+        }
+
+        .sidebar a:hover {
+            background-color: #555;
+        }
+
+        /* Main content area (75% width) */
+        .main-content {
+            width: 75%;
+            padding: 20px;
+            box-sizing: border-box;
+            float: left;
+        }
+
+        /* About content */
+        .about-content {
+            padding-top: 20px;
+        }
+
+        /* Small screen responsiveness */
+        @media (max-width: 768px) {
+            .sidebar, .main-content {
+                width: 100%;
+                float: none;
+            }
+
+            .header {
+                height: 200px; /* Adjust height for smaller screens */
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Full-width header with company image -->
+    <div class="header">
+        <!-- Optional: You can add text over the image -->
+        <!-- <h1 style="color: white; text-align: center; padding-top: 100px;">Welcome to Our Company</h1> -->
+    </div>
+
+    <!-- Main content layout -->
+    <div class="sidebar">
+        <h2>Navigation</h2>
+        <a href="customer-upload.html">Customer Upload</a>
+        <a href="search-customer.html">Search Customer</a>
+    </div>
+
+    <div class="main-content">
+        <div class="about-content">
+            <h3>Welcome to UpwardIQ</h3>
+            <h3>Bulk Upload customer Data Application</h3>
+        </div>
+    </div>
+
+</body>
+</html>

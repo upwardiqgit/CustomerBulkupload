@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Upload</title>
+    <style>
+        /* Basic Reset */
+        body, h1, h2, p, a, textarea {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        /* Overall body styles */
+        body {
+            margin: 0;
+            background-color: #f4f4f4;
+        }
+
+        /* Full-width image at the top */
+        .header {
+            width: 100%;
+            height: 300px; /* Adjust height of the image */
+            background-image: url(./logo\ _1.jpg); /* company image by  using url */
+            background-size: cover;
+            background-position: center;
+        }
+
+        /* Left Sidebar (25% width) */
+        .sidebar {                            /*  left sidebar setting background color and text color */
+            width: 25%;
+            background-color: #333;
+            color: white;
+            padding: 20px;
+            box-sizing: border-box;
+            float: left;
+        }
+
+        /* Sidebar links style */
+        .sidebar a {
+            display: block;
+            color: white;
+            text-decoration: none;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #444;
+            transition: background-color 0.3s;
+        }
+
+        .sidebar a:hover {
+            background-color: #555; 
+        }
+
+        /* Main content area (75% width) */
+        .main-content {
+            width: 75%;
+            padding: 20px;
+            box-sizing: border-box;
+            float: left;
+        }
+
+        /* Form and Table styles */
+        .form-container {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        textarea {
+            width: 100%;
+            height: 200px;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            box-sizing: border-box;
+            margin-bottom: 20px;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #555;
+            color: white;
+            border: none;
+            cursor: pointer;
+            margin-right: 10px;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color:green;   /* when i am put on the curser responding immiediately*/
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;  /* output table */
+            margin-top: 20px;
+        }
+
+        table, th, td {
+            border: 1px solid #ccc;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+
+        /* Small screen responsiveness */
+        @media (max-width: 768px) {
+            .sidebar, .main-content {
+                width: 100%;
+                float: none;
+            }
+
+            .header {
+                height: 200px; /* Adjust height for smaller screens */
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Full-width header with company image -->
+    <div class="header"></div>
+
+    <!-- Main content layout -->
+    <div class="sidebar">
+        <h2>Navigation</h2>
+        <a href="index.html">Home</a>
+        <a href="customer-upload.html">Customer Upload</a>
+        <a href="search-customer.html">Search Customer</a>
+    </div>
+
+    <div class="main-content">
+        <h2>Upload Customer Data</h2>
+
+        <!-- Form for JSON input and buttons -->
+        <div class="form-container">
+            <label for="customerData">Customer Data (JSON Array):</label>
+            <textarea id="customerData" placeholder='Enter an array of JSON objects here...'></textarea>
+
+            <button id="uploadDataBtn">Upload Data</button>
+            <button id="clearBtn">Clear</button>
+        </div>
+
+        <!-- Table to display uploaded data -->
+        <div id="uploadedDataContainer">
+            <table id="uploadedDataTable" style="display:none;">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>                         <!-- table headings-->
+                        <th>Gender</th>
+                        <th>Address</th>
+                    </tr>
+                </thead>
+                <tbody id="dataRows">
+                    <!-- Data rows will be populated here -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        // Handle the Upload Data button click
+        document.getElementById('uploadDataBtn').addEventListener('click', function() {
+            const dataInput = document.getElementById('customerData').value;
+
+            try {
+                const jsonData = JSON.parse(dataInput);
+
+                // Check if the parsed data is an array
+                if (Array.isArray(jsonData)) {
+                    uploadDataToServer(jsonData);
+                } else {
+                    alert('Please enter a valid JSON array.');
+                }
+            } catch (error) {
+                alert('Invalid JSON format.');
+            }
+        });
+
+        // Handle the Clear button click
+        document.getElementById('clearBtn').addEventListener('click', function() {
+            document.getElementById('customerData').value = '';
+            document.getElementById('uploadedDataTable').style.display = 'none';
+            document.getElementById('dataRows').innerHTML = ''; // Clear table data
+        });
+
+        // Function to upload data to the server
+        function uploadDataToServer(data) {
+            fetch('/api/upload-records', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Success:', data);
+                renderDataInTable(data);
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+        }
+
+        // Function to render uploaded data in the table
+        function renderDataInTable(data) {
+            const table = document.getElementById('uploadedDataTable');
+            const tbody = document.getElementById('dataRows');
+
+            // Show the table after data is uploaded
+            table.style.display = 'block';
+            tbody.innerHTML = ''; // Clear previous rows
+
+            data.forEach((item) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${item.id || 'N/A'}</td>
+                    <td>${item.name || 'N/A'}</td>
+                    <td>${item.gender || 'N/A'}</td>
+                    <td>${item.address || 'N/A'}</td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+    </script>
+
+</body>
+</html>
